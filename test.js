@@ -37,7 +37,7 @@ describe('tests', () => {
 
       })
       .then(res => {
-        console.log(res.body)
+        //console.log(res.body)
         const {credential, session_handle: {access_token, refresh_token}} = res.body
         accessToken = access_token
         expect(refresh_token).to.not.be.undefined
@@ -71,7 +71,7 @@ describe('tests', () => {
     .get('https://api-gtm.grubhub.com/diners/783587cc-487f-11e4-9697-9cb654858910/search_listing?pageNum=1&pageSize=10&facet=scheduled%3Afalse&facet=orderType%3AALL&sorts=default')
     .set(headers)
     .then(res => {
-      console.log(res.body)
+      //console.log(res.body)
       const {stats} = res.body
       expect(stats).to.not.be.undefined
       done()
@@ -79,16 +79,28 @@ describe('tests', () => {
     .catch(done)
   })
 
-  it.only('should autocomplete', done => {
+  it.only('should autocomplete addresses', done => {
     let queryText = '1200 market street'
     agent.get('https://api-gtm.grubhub.com/geocode/autocomplete?queryText=${queryText}&locationBias=true')
     .set(headers)
     .then(res => {
-      console.log(res.body)
+      //console.log(res.body)
       const { results } = res.body
       expect(results).to.be.an.array
       done()
     })
   })
+  it.only('should autocomplete food', done => {
+    const prefix = 'pizza'
+    agent.get(`https://api-gtm.grubhub.com/autocomplete?prefix=${prefix}&lat=39.91175079&lng=-75.18917084&geohash=dr4e118yv3de&resultTypeList=dishTerm&resultTypeList=restaurant&locationMode=delivery&resultCount=8&isCatering=false`)
+    .set(headers)
+    .then(res => {
+      //console.log(res.body)
+      const {result_list} = res.body
+      expect(result_list).to.be.an.array
+      done()
+    })
+  })
+
 
 })
