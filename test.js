@@ -101,6 +101,21 @@ describe('tests', () => {
       done()
     })
   })
+  it.only('should search for food', done => {
+    const queryText = 'pizza'
+    agent
+    .get(`https://api-gtm.grubhub.com/restaurants/search?orderMethod=delivery&locationMode=DELIVERY&facetSet=umamiV2&pageSize=0&hideHateos=true&searchMetrics=true&queryText=${queryText}&location=POINT(-75.16022492%2039.95172500)&preciseLocation=true&geohash=dr4e38vzxv66&facet=open_now%3Atrue&includeOffers=true&sortSetId=umamiv3&countOmittingTimes=true`)
+    .set(headers)
+    .then(res => {
+      console.log(res.body)
+      const {search_result: {stats: {total_results, result_count, page_size, total_hits}}} = res.body
+      expect(total_results).to.be.a.number
+      expect(result_count).to.be.a.number
+      expect(page_size).to.be.a.number
+      expect(total_hits).to.be.a.number
+      done()
+    })
+  })
 
 
 })
